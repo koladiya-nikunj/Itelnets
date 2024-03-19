@@ -7,10 +7,19 @@ import { Login } from 'src/models/loginModel';
 export class LoginService {
   constructor(@InjectModel(Login.name) private readonly loginModel: Model<Login>) {}
 
-  async login(email: string, password: string): Promise<any> {
+  async emailExists(email: string): Promise<boolean> {
+    const user = await this.loginModel.findOne({ email });
+    return !!user;
+  }
+
+  async numberExists(email: string): Promise<boolean> {
+    const user = await this.loginModel.findOne({ email });
+    return !!user;
+  }
+
+  async register(email: string, password: string): Promise<boolean> {
     try {
       await this.loginModel.create({ email, password });
-
       return true;
     } catch (error) {
       console.error('Error while creating document:', error);

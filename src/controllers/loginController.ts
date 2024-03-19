@@ -6,14 +6,31 @@ import { LoginService } from 'src/service/loginService';
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
+ 
   @Post("/login") 
-  async login(@Body('email') email: string, @Body('password') password: string) {
-    const isAuthenticated = await this.loginService.login(email, password);
+  async register(@Body() body: any) { 
+    const { email, password } = body; 
+    if (!email || !password) { 
+      return { message: 'Missing required fields' };
+    }
 
-    if (isAuthenticated) {
-      return {email,password, message: 'Login successful' };
+    const emailExists = await this.loginService.emailExists(email);
+    const numberExists = await this.loginService.numberExists(password);
+
+    if (emailExists && numberExists) {
+      return { message: 'Email and mobile number already registered' };
+    } else if (emailExists) {
+      return { message: 'Email already registered' };
+    } else if (numberExists) {
+      return { message: 'Mobile number already registered' };
     } else {
-      return { message: 'Login failed' };
+      const isRegistered = await this.loginService.register( email, password);
+      if (isRegistered) {
+        
+        return { message: 'Registration successful' };
+      } else {
+        return { message: 'Registration failed' };
+      }
     }
   }
 }

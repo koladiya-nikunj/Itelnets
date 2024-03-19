@@ -14,12 +14,12 @@ export class RegisterService {
     return !!user;
   }
 
-  async numberExists(number: string): Promise<boolean> {
+  async numberExists(number: number): Promise<boolean> {
     const user = await this.registerModel.findOne({ number });
     return !!user;
   }
 
-  async register(number: string, email: string, password: string): Promise<boolean> {
+  async register(number: number, email: string, password: string): Promise<boolean> {
     try {
       await this.registerModel.create({ number, email, password });
       return true;
