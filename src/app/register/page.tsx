@@ -1,57 +1,110 @@
+"use client"
 import Link from 'next/link';
-import React from 'react';
+import { useState } from 'react';
+import { UserOutlined,EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Form, Input, Button, notification } from 'antd';
+import { MailOutlined, LockOutlined,CheckCircleOutlined,CloseCircleOutlined } from '@ant-design/icons';
+import axios from 'axios'
 
 const Register = () => {
+  const [form] = Form.useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onFinish = async (values: any) => {
+    try {
+      setIsSubmitting(true);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await axios.post('http://localhost:5000/register', values);
+      if (response.data.message === 'Registration successful') {
+        notification.success({
+          message: 'Success',
+          description: response.data.message,
+          duration: 3, // Duration in seconds
+          icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+        });
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1000);
+      } else {
+        notification.error({
+          message: 'Error',
+          description: response.data.message,
+          duration: 3, // Duration in seconds
+          icon: <CloseCircleOutlined style={{ color: '#ff4d4f' }} />,
+        });
+      }
+      form.resetFields();
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   return (
-    <div className='flex items-center justify-center h-screen bg-gray-300'>
-      <form className='bg-white shadow-md rounded-lg px-10 pt-8 pb-8 mb-4 w-1/4 '>
-        <h1 className='font-bold text-3xl p-2 text-center'>Register</h1>
-        <div className='mb-4 '>
-          <label className='block text-gray-700 text-sm font-bold mb-1' htmlFor='number'>
-          Mobile<span className="text-red-500">*</span> :
-          </label>
-          <input
-            className='appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            id='email'
-            type='email'
-            name='email'
-            placeholder='Enter your mobile number'
+    <div className='flex items-center justify-center min-h-screen bg-gray-300'>
+      <Form
+        form={form}
+        name='register'
+        onFinish={onFinish}
+        className='bg-white shadow-md rounded-lg px-10 pt-8 pb-8 mb-4 w-full max-w-md'
+      >
+        <h1 className='font-bold text-3xl p-2 mb-4 text-center'>Register</h1>
+        <Form.Item
+          name='number'
+          rules={[{ required: true, message: 'Please enter your mobile number!' }]}
+        >
+          <Input
+            prefix={<UserOutlined className='site-form-item-icon' />}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, '').slice(0, 10);;
+              form.setFieldsValue({ number: value });
+            }}
+            placeholder='Mobile Number'
           />
-        </div>
-        <div className='mb-4 '>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='email'>
-            Email<span className="text-red-500">*</span> :
-          </label>
-          <input
-            className='appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            id='email'
-            type='email'
-            name='email'
-            placeholder='Enter your email'
+        </Form.Item>
+        <Form.Item
+          name='email'
+          rules={[{ required: true, type: 'email', message: 'Please enter your email!' }]}
+        >
+          <Input
+            prefix={<MailOutlined className='site-form-item-icon' />}
+            placeholder='Email'
           />
-        </div>
-        <div className='mb-6'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='password'>
-            Password<span className="text-red-500">*</span> :
-          </label>
-          <input
-            className='appearance-none border-2 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            id='password'
-            type='password'
-            name='password'
-            placeholder='Enter your password'
-          />
-        </div>
-        <div className='flex items-center justify-between'>
-          <button
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-            type='button'
+        </Form.Item>
+        <Form.Item
+          name='password'
+          rules={[
+            { required: true, message: 'Please enter your password!' },
+            {
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+              message: 'Password must be at least 8 characters with A-Z, a-z, 0-9, and special characters @$!%*#?&',
+            },
+          ]}
+        >
+         <Input.Password
+    prefix={<LockOutlined className='site-form-item-icon' />}
+    placeholder='Password'
+    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+  />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type='primary'
+            htmlType='submit'
+            loading={isSubmitting}
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded focus:outline-none focus:shadow-outline w-full'
           >
             Register
-          </button>
-          <div className='pr-2'>Already have an account? <Link className=' text-blue-600 font-bold pl-1' href="/login">Log In</Link></div>
-        </div>
-      </form>
+          </Button>
+          <div className='text-center mt-4'>
+            Already have an account?{' '}
+            <Link className=' text-blue-600 font-bold pl-1' href='/login'>
+              Log In
+            </Link>
+          </div>
+        </Form.Item>
+      </Form>
     </div>
   );
 };
