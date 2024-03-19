@@ -1,36 +1,34 @@
 // src/controllers/login.controller.ts
 import { Controller, Post, Body } from '@nestjs/common';
 import { LoginService } from 'src/service/loginService';
+import { RegisterService } from 'src/service/registerService';
 
-@Controller() 
+@Controller()
 export class LoginController {
-  constructor(private readonly loginService: LoginService) {}
+  constructor(private readonly loginService: LoginService, private readonly registerService: RegisterService) { }
 
- 
-  @Post("/login") 
-  async register(@Body() body: any) { 
-    const { email, password } = body; 
-    if (!email || !password) { 
+  @Post("/login")
+  async register(@Body() body: any) {
+    const { email, password } = body;
+    if (!email || !password) {
       return { message: 'Missing required fields' };
     }
+    const emailExists = await this.registerService.emailExists(email);
+    if (!emailExists) {
+      return { message: 'Email not registered' };
+    }
 
-    const emailExists = await this.loginService.emailExists(email);
-    const numberExists = await this.loginService.numberExists(password);
+    const passwordMatch = await this.registerService.passwordExists(email, password);
+    if (!passwordMatch) {
+      return { message: 'Password does not match with the email' };
+    }
 
-    if (emailExists && numberExists) {
-      return { message: 'Email and mobile number already registered' };
-    } else if (emailExists) {
-      return { message: 'Email already registered' };
-    } else if (numberExists) {
-      return { message: 'Mobile number already registered' };
+    const isLoginSuccessful = await this.loginService.login(email, password);
+    if (isLoginSuccessful) {
+      return { message: 'Login successful' };
     } else {
-      const isRegistered = await this.loginService.register( email, password);
-      if (isRegistered) {
-        
-        return { message: 'Registration successful' };
-      } else {
-        return { message: 'Registration failed' };
-      }
+      return { message: 'Login failed' };
     }
   }
+  
 }

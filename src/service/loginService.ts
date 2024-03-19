@@ -12,15 +12,11 @@ export class LoginService {
     return !!user;
   }
 
-  async numberExists(email: string): Promise<boolean> {
-    const user = await this.loginModel.findOne({ email });
-    return !!user;
-  }
-
-  async register(email: string, password: string): Promise<boolean> {
+  async login(email: string, password: string): Promise<boolean> {
     try {
-      await this.loginModel.create({ email, password });
-      return true;
+      const user = await this.loginModel.create({ email, password });
+      console.log({email,password});
+      return !!user;
     } catch (error) {
       console.error('Error while creating document:', error);
       return false;

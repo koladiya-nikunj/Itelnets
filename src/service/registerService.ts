@@ -18,6 +18,10 @@ export class RegisterService {
     const user = await this.registerModel.findOne({ number });
     return !!user;
   }
+  async passwordExists(email:string,password: string): Promise<boolean> {
+    const user = await this.registerModel.findOne({ email,password });
+    return !!user;
+  }
 
   async register(number: number, email: string, password: string): Promise<boolean> {
     try {
