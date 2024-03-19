@@ -1,23 +1,38 @@
 "use client"
 import Link from 'next/link';
 import { useState } from 'react';
-import { Form, Input, Button } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined,EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Form, Input, Button, notification } from 'antd';
+import { MailOutlined, LockOutlined,CheckCircleOutlined,CloseCircleOutlined } from '@ant-design/icons';
+import axios from 'axios'
 
 const Register = () => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleMobileNumberChange = (value: string) => {
-    return value.replace(/\D/g, '');
-  };
-
   const onFinish = async (values: any) => {
     try {
       setIsSubmitting(true);
-      // Simulate form submission delay (remove this in actual implementation)
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Received values:', values);
+      const response = await axios.post('http://localhost:5000/Login', values);
+      if (response.data.message === 'Login successful') {
+        notification.success({
+          message: 'Success',
+          description: response.data.message,
+          duration: 2, // Duration in seconds
+          icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+        });
+        setTimeout(() => {
+          window.location.href = '/profile';
+        }, 1000);
+      } else {
+        notification.error({
+          message: 'Error',
+          description: response.data.message,
+          duration: 2, // Duration in seconds
+          icon: <CloseCircleOutlined style={{ color: '#ff4d4f' }} />,
+        });
+      }
       form.resetFields();
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -25,7 +40,7 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
-
+  
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-300'>
       <Form
@@ -46,13 +61,19 @@ const Register = () => {
         </Form.Item>
         <Form.Item
           name='password'
-          rules={[{ required: true, message: 'Please enter your password!' }]}
+          rules={[
+            { required: true, message: 'Please enter your password!' },
+            {
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+              message: 'Password must be at least 8 characters with A-Z, a-z, 0-9, and special characters @$!%*#?&',
+            },
+          ]}
         >
-          <Input
-            prefix={<LockOutlined className='site-form-item-icon' />}
-            type='password'
-            placeholder='Password'
-          />
+         <Input.Password
+    prefix={<LockOutlined className='site-form-item-icon' />}
+    placeholder='Password'
+    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+  />
         </Form.Item>
         <Form.Item>
           <Button
@@ -64,7 +85,7 @@ const Register = () => {
             Login
           </Button>
           <div className='text-center mt-4'>
-           Not registered ?{' '}
+            Not an account ?{' '}
             <Link className=' text-blue-600 font-bold pl-1' href='/register'>
               Register
             </Link>

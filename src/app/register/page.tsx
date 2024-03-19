@@ -19,7 +19,7 @@ const Register = () => {
         notification.success({
           message: 'Success',
           description: response.data.message,
-          duration: 3, // Duration in seconds
+          duration: 2, // Duration in seconds
           icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
         });
         setTimeout(() => {
@@ -29,7 +29,7 @@ const Register = () => {
         notification.error({
           message: 'Error',
           description: response.data.message,
-          duration: 3, // Duration in seconds
+          duration: 2, // Duration in seconds
           icon: <CloseCircleOutlined style={{ color: '#ff4d4f' }} />,
         });
       }
