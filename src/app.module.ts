@@ -5,10 +5,11 @@ import { LoginModule } from './modules/loginModule';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import * as cors from 'cors';
+import { RegisterModule } from './modules/registerModule';
 
 @Module({
   imports: [
-    LoginModule,  
+    LoginModule,RegisterModule,
     MongooseModule.forRootAsync({
       useFactory: async () => ({
         uri: 'mongodb://localhost:27017/itelnets',
