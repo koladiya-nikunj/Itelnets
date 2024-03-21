@@ -31,10 +31,4 @@ export class LoginController {
     }
   }
 
-  @Post("/api/auth/callback/google")
-  async handleLoginRequest(@Body() data: any) {
-    console.log('Received data from frontend:', data);
-    return 'Data received successfully';
-  }
-
 }
