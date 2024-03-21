@@ -20,7 +20,7 @@ export class LoginController {
 
     const passwordMatch = await this.registerService.passwordExists(email, password);
     if (!passwordMatch) {
-      return { message: 'Password does not match with the email' };
+      return { message: 'Email and Password does not match' };
     }
 
     const isLoginSuccessful = await this.loginService.login(email, password);
@@ -30,5 +30,11 @@ export class LoginController {
       return { message: 'Login failed' };
     }
   }
-  
+
+  @Post("/api/auth/callback/google")
+  async handleLoginRequest(@Body() data: any) {
+    console.log('Received data from frontend:', data);
+    return 'Data received successfully';
+  }
+
 }
