@@ -1,10 +1,12 @@
 "use client"
 import Link from 'next/link';
 import { useState } from 'react';
-import { UserOutlined,EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Form, Input, Button, notification } from 'antd';
-import { MailOutlined, LockOutlined,CheckCircleOutlined,CloseCircleOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import axios from 'axios'
+import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 
 const Register = () => {
   const [form] = Form.useForm();
@@ -40,7 +42,7 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-300'>
       <Form
@@ -69,11 +71,11 @@ const Register = () => {
             },
           ]}
         >
-         <Input.Password
-    prefix={<LockOutlined className='site-form-item-icon' />}
-    placeholder='Password'
-    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-  />
+          <Input.Password
+            prefix={<LockOutlined className='site-form-item-icon' />}
+            placeholder='Password'
+            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+          />
         </Form.Item>
         <Form.Item>
           <Button
@@ -85,10 +87,18 @@ const Register = () => {
             Login
           </Button>
           <div className='text-center mt-4'>
-            Not an account ?{' '}
+            Don't have an account ?{' '}
             <Link className=' text-blue-600 font-bold pl-1' href='/register'>
               Register
             </Link>
+          </div>
+          <div className='text-center mt-4'>
+            <button className="" type="button">
+              <span onClick={() => signIn("google")} className="flex bg-gray-100 hover:bg-gray-200 p-2 px-8 rounded-lg">
+                <Image className='mx-2 mr-8' src="/google.png" alt="Google Logo" height={24} width={24} />
+                <span className="mr-5 font-semibold"><a className='hover:text-black'>Continue with Google</a></span>
+              </span>
+            </button>
           </div>
         </Form.Item>
       </Form>

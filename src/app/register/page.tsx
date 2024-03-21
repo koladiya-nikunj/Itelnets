@@ -1,9 +1,9 @@
 "use client"
 import Link from 'next/link';
 import { useState } from 'react';
-import { UserOutlined,EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Form, Input, Button, notification } from 'antd';
-import { MailOutlined, LockOutlined,CheckCircleOutlined,CloseCircleOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
 const Register = () => {
@@ -40,7 +40,7 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-300'>
       <Form
@@ -82,11 +82,11 @@ const Register = () => {
             },
           ]}
         >
-         <Input.Password
-    prefix={<LockOutlined className='site-form-item-icon' />}
-    placeholder='Password'
-    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-  />
+          <Input.Password
+            prefix={<LockOutlined className='site-form-item-icon' />}
+            placeholder='Password'
+            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+          />
         </Form.Item>
         <Form.Item>
           <Button

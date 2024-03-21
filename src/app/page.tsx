@@ -9,7 +9,7 @@ export default function Home() {
       </div>
       <div className="bg-fuchsia-950 w- full h-16 justify-center flex space-x-60 items-center pl-16 text-white text-xl">
         <input type="text" placeholder="Search for Medicines, Products, Brands and More" className="text-sm mx-[-90px] py-2 pl-4 text-neutral-950 block w-[700px] outline-none" />
-        <Link className="pl-[650px]" href="/login">Login</Link>
+        <Link className="pl-[650px]" href="http://localhost:3000/login">Login</Link>
       </div>
       <div className="w-full min-h-screen bg-cyan-950"></div>
     </main>

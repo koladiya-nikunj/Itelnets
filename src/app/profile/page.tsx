@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Profile = () => {
@@ -8,7 +9,9 @@ const Profile = () => {
         <div>Product</div>
         <div>Card</div>
         <div>Contact Us</div>
-        <div className='pl-96'>logo</div>
+        <div className='pl-96'>
+          <Link href="/login">Logout</Link>
+        </div>
      </div>
     
     </div>
