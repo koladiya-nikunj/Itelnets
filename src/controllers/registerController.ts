@@ -1,4 +1,4 @@
-// src/controllers/register.controller.ts
+// src/controllers/registerController.ts
 import { Controller, Post, Body } from '@nestjs/common';
 import { RegisterService } from 'src/service/registerService';
 

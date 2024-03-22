@@ -1,3 +1,4 @@
+// src/modules/loginModule.ts
 import { Module } from '@nestjs/common';
 import { LoginController } from 'src/controllers/loginController';
 import { Login, LoginSchema } from 'src/models/loginModel';

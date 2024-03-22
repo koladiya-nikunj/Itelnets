@@ -1,3 +1,4 @@
+// src/modules/registerModule.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RegisterController } from 'src/controllers/registerController';

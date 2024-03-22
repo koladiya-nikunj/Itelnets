@@ -1,4 +1,4 @@
-// src/controllers/loginController.ts
+// src/controllers/resetPasswordModelController.ts
 import { Controller, Post, Body } from '@nestjs/common';
 import { LoginService } from 'src/service/loginService';
 import { RegisterService } from 'src/service/registerService';

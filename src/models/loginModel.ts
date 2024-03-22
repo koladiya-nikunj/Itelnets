@@ -1,4 +1,4 @@
-// src/models/login.model.ts
+// src/models/loginModel.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
