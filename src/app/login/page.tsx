@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Form, Input, Button, notification } from 'antd';
 import { MailOutlined, LockOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
@@ -11,6 +11,15 @@ import Image from 'next/image';
 const Register = () => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsMounted(true);
+    }, 500); // Delay rendering for 2 seconds
+
+    return () => clearTimeout(timer); // Clean up the timer on component unmount
+  }, []);
 
   const onFinish = async (values: any) => {
     try {
@@ -42,6 +51,15 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (!isMounted) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-300">
+        <div className="w-40 h-40 border-4 border-gray-200 border-t-blue-800 rounded-full animate-spin border-dashed"></div>
+      </div>
+    );
+  }
+
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-300'>
