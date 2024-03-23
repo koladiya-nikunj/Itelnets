@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Form, Input, Button, notification } from 'antd';
-import { MailOutlined, LockOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { MailOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
 
@@ -23,8 +23,8 @@ const Register = () => {
     try {
       setIsSubmitting(true);
       await new Promise(resolve => setTimeout(resolve, 1000));
-      const response = await axios.post('http://localhost:5000/login', values);
-      if (response.data.message === 'Login successful') {
+      const response = await axios.post('http://localhost:5000/resetpassword', values);
+      if (response.data.message === 'Password reset link send to your email') {
         notification.success({
           message: 'Success',
           description: response.data.message,
@@ -32,7 +32,7 @@ const Register = () => {
           icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
         });
         setTimeout(() => {
-          window.location.href = '/profile';
+          window.location.href = '/login';
         }, 1000);
       } else {
         notification.error({

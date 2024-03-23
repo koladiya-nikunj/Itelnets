@@ -1,7 +1,7 @@
 .scrolling-text {
     white-space: nowrap;
     overflow: hidden;
-    animation: marquee 45s linear infinite;
+    animation: marquee 25s linear infinite;
   }
   
   @keyframes marquee {
