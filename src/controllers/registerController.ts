@@ -13,7 +13,7 @@ export class RegisterController {
       return { message: 'Missing required fields' };
     }
 
-    const emailExists = await this.registerService.emailExists(email);
+    const emailExists = await this.registerService.existEmail(email);
     const numberExists = await this.registerService.numberExists(number);
 
     if (emailExists && numberExists) {

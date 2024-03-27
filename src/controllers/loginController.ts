@@ -13,7 +13,7 @@ export class LoginController {
     if (!email || !password) {
       return { message: 'Missing required fields' };
     }
-    const emailExists = await this.registerService.emailExists(email);
+    const emailExists = await this.registerService.existEmail(email);
     if (!emailExists) {
       return { message: 'Email not registered' };
     }
@@ -28,6 +28,26 @@ export class LoginController {
       return { message: 'Login successful' };
     } else {
       return { message: 'Login failed' };
+    }
+  }
+
+
+  @Post("/resetpassword")
+  async resetpassword(@Body() body: any) {
+    const { email, password } = body;
+    if (!email) {
+      return { message: 'Missing required fields' };
+    }
+    const emailExists = await this.loginService.resetEmailExists(email);
+    if (!emailExists) {
+      return { message: 'Email not registered' };
+    }
+
+    const isLoginSuccessful = await this.loginService.login(email, password);
+    if (isLoginSuccessful) {
+      return { message: 'Password reset link send to your email' };
+    } else {
+      return { message: 'Password reset failed' };
     }
   }
 

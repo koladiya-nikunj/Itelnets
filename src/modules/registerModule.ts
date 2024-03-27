@@ -10,7 +10,7 @@ import { Register, RegisterSchema } from 'src/models/registerModel';
     MongooseModule.forFeature([{ name: Register.name, schema: RegisterSchema }]),
   ],
   controllers: [RegisterController],
-  providers: [RegisterService,],
+  providers: [RegisterService],
   exports:[RegisterModule]
 })
 export class RegisterModule {}
