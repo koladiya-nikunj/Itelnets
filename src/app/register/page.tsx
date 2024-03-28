@@ -15,8 +15,7 @@ const Register = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsMounted(true);
-    }, 500); // Delay rendering for 2 seconds
-
+    }, 500);
     return () => clearTimeout(timer); // Clean up the timer on component unmount
   }, []);
   
@@ -25,7 +24,7 @@ const Register = () => {
       setIsSubmitting(true);
       await new Promise(resolve => setTimeout(resolve, 1000));
       const response = await axios.post('http://localhost:5000/register', values);
-      if (response.data.message === 'Registration successful') {
+      if (response.status === 201) {
         notification.success({
           message: 'Success',
           description: response.data.message,
@@ -38,14 +37,21 @@ const Register = () => {
       } else {
         notification.error({
           message: 'Error',
-          description: response.data.message,
+          description: response.data.message || 'An error occurred',
           duration: 2, // Duration in seconds
           icon: <CloseCircleOutlined style={{ color: '#ff4d4f' }} />,
         });
       }
       form.resetFields();
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error submitting form:', error);
+      notification.error({
+        message: 'Error',
+        description: error.response?.data.message || 'An error occurred',
+        duration: 2, // Duration in seconds
+        icon: <CloseCircleOutlined style={{ color: '#ff4d4f' }} />,
+      });
+      form.resetFields();
     } finally {
       setIsSubmitting(false);
     }

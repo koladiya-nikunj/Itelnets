@@ -31,9 +31,6 @@ const Register = () => {
           duration: 2, // Duration in seconds
           icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
         });
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 1000);
       } else {
         notification.error({
           message: 'Error',
