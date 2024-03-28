@@ -1,34 +1,38 @@
 // src/controllers/registerController.ts
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpException } from '@nestjs/common';
 import { RegisterService } from 'src/service/registerService';
 
-@Controller() 
+@Controller()
 export class RegisterController {
-  constructor(private readonly registerService: RegisterService) {}
+  constructor(private readonly registerService: RegisterService) { }
 
-  @Post("/register") 
-  async register(@Body() body: any) { 
-    const { number, email, password } = body; 
-    if (!number || !email || !password) { 
-      return { message: 'Missing required fields' };
+  @Post("/register")
+  async register(@Body() body: any) {
+    const { number, email, password } = body;
+    if (!number || !email || !password) {
+      throw new HttpException('Missing required fields', HttpStatus.BAD_REQUEST);
+    }
+    // Password validation
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    if (!passwordPattern.test(password)) {
+      throw new HttpException('Password must be at least 8 characters with A-Z, a-z, 0-9, and special characters @$!%*#?&', HttpStatus.BAD_REQUEST);
     }
 
     const emailExists = await this.registerService.existEmail(email);
     const numberExists = await this.registerService.numberExists(number);
 
     if (emailExists && numberExists) {
-      return { message: 'Email and mobile number already registered' };
+      throw new HttpException('Email and mobile number already registered', HttpStatus.CONFLICT);
     } else if (emailExists) {
-      return { message: 'Email already registered' };
+      throw new HttpException('Email already registered', HttpStatus.CONFLICT);
     } else if (numberExists) {
-      return { message: 'Mobile number already registered' };
+      throw new HttpException('Mobile number already registered', HttpStatus.CONFLICT);
     } else {
-      const isRegistered = await this.registerService.register(number, email, password);
+      const isRegistered = await this.registerService.registerSuccess(number, email, password);
       if (isRegistered) {
-        
-        return { message: 'Registration successful' };
+        throw new HttpException('Registration successful', HttpStatus.CREATED);
       } else {
-        return { message: 'Registration failed' };
+        throw new HttpException('Registration failed', HttpStatus.UNAUTHORIZED);
       }
     }
   }

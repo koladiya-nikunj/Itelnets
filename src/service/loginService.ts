@@ -15,7 +15,7 @@ export class LoginService {
     return !!userData;
   }
 
-  async login(email: string, password: string): Promise<boolean> {
+  async loginSuccess(email: string, password: string): Promise<boolean> {
     const emailExists = await this.emailExists(email);
 
     if (emailExists) {

@@ -25,7 +25,7 @@ export class RegisterService {
     return !!passwordMatch;
   }
 
-  async register(number: number, email: string, password: string): Promise<boolean> {
+  async registerSuccess(number: number, email: string, password: string): Promise<boolean> {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       await this.registerModel.create({ number, email, password:hashedPassword });
